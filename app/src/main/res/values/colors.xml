@@ -7,4 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+
+    <color name="oxford_navy">#052F5F</color>
+    <color name="yale_blue">#005377</color>
+    <color name="seaweed">#06A77D</color>
+    <color name="golden_sand">#D5C67A</color>
+    <color name="golden_orange">#F1A208</color>
+
+
+    <!-- Light background -->
+    <color name="light_background">#F5F5F5</color> <!-- very light gray/white -->
+
+    <!-- Gray color -->
+    <color name="gray">#9E9E9E</color> <!-- neutral medium gray -->
 </resources>
