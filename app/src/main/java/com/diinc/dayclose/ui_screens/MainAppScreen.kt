@@ -23,44 +23,78 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun MainAppScreen(navController: NavController) {
+////    val backgroundColor = colorResource(id = R.color.punch_red)
+////    StatusBarColor(backgroundColor)
+//
+////    Scaffold { paddingValues ->
+////        Column(
+////            modifier = Modifier
+////                .fillMaxSize()
+////                .padding(paddingValues)          // ✅ handles system insets
+////                .background(colorResource(id = R.color.gray))
+////                .verticalScroll(rememberScrollState())
+////                .padding(horizontal = 12.dp)    // ✅ your own content padding
+////        ) {
+////            // Your screen content here
+////
+////
+////            Text("hello this is my main screen")
+////        }
+////    }
+//
+//
+//    Column(
+//        modifier = Modifier
+//            .fillMaxSize()
+//            .background(colorResource(id = R.color.gray))
+//            .verticalScroll(rememberScrollState())
+//            .padding(horizontal = 12.dp, vertical = 16.dp)
+//    ) {
+//
+//        Text(
+//            text = "Hello, this is my main screen",
+//            fontSize = 18.sp
+//        )
+//    }
+//}
+
 @Composable
 fun MainAppScreen(navController: NavController) {
-//    val backgroundColor = colorResource(id = R.color.punch_red)
-//    StatusBarColor(backgroundColor)
 
-//    Scaffold { paddingValues ->
-//        Column(
-//            modifier = Modifier
-//                .fillMaxSize()
-//                .padding(paddingValues)          // ✅ handles system insets
-//                .background(colorResource(id = R.color.gray))
-//                .verticalScroll(rememberScrollState())
-//                .padding(horizontal = 12.dp)    // ✅ your own content padding
-//        ) {
-//            // Your screen content here
-//
-//
-//            Text("hello this is my main screen")
-//        }
-//    }
-
-
-    Column(
+    Box(
         modifier = Modifier
             .fillMaxSize()
+            // 👇 This background will go BEHIND the status bar
             .background(colorResource(id = R.color.gray))
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 12.dp, vertical = 16.dp)
     ) {
 
-        Text(
-            text = "Hello, this is my main screen",
-            fontSize = 18.sp
-        )
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+
+                // 👇 THIS is the key line
+                // It pushes CONTENT below the status bar
+                .statusBarsPadding()
+
+                // Scrollable content
+                .verticalScroll(rememberScrollState())
+
+                // Your own spacing
+                .padding(horizontal = 12.dp, vertical = 16.dp)
+        ) {
+
+            Text(
+                text = "Hello, this is my main screen",
+                fontSize = 18.sp
+            )
+
+            // other UI elements...
+        }
     }
 }
-
 
 
 

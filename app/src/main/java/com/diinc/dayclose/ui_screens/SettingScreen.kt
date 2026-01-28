@@ -25,64 +25,97 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.ArrowLeft
 
 
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun SettingScreen(navController: NavController) {
+//    val backgroundColor = colorResource(id = R.color.seaweed)
+//
+//    Scaffold(
+//        topBar = {
+//            TopAppBar(
+//                title = {
+//                    Text(
+//                        text = "App Settings",
+//                        color = Color.White
+//                    )
+//                },
+//                colors = TopAppBarDefaults.topAppBarColors(
+//                    containerColor = backgroundColor,
+//                    titleContentColor = Color.White,
+//                    navigationIconContentColor = Color.White
+//                )
+//            )
+//        }
+//    ) { innerPadding ->
+//
+//        /**
+//         * innerPadding already includes:
+//         * - Status bar height
+//         * - TopAppBar height
+//         *
+//         * Bottom bar padding is NOT included
+//         * (because MainActivity hides it for this screen)
+//         */
+//        Column(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(innerPadding)
+//                .background(colorResource(id = R.color.gray))
+//                .verticalScroll(rememberScrollState())
+//                .padding(horizontal = 12.dp, vertical = 16.dp)
+//        ) {
+//
+//            Text(
+//                text = "Hello, this is my setting screen",
+//                fontSize = 18.sp
+//            )
+//        }
+//    }
+//}
+//
+//
+//
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(navController: NavController) {
-    val topBarColor = colorResource(id = R.color.seaweed)
+
+    val backgroundColor = colorResource(id = R.color.seaweed)
 
     Scaffold(
         topBar = {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 title = {
-                    Text(
-                        text = "App Settings",
-                        color = Color.White
-                    )
+                    Text("App Settings", color = Color.White)
                 },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
                             imageVector = FontAwesomeIcons.Solid.ArrowLeft,
                             contentDescription = "Back",
-                            tint = Color.White,
-                            modifier = Modifier.size(24.dp)
+                            tint = Color.White
                         )
                     }
                 },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = topBarColor
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = backgroundColor
                 )
             )
         }
     ) { innerPadding ->
 
-        /**
-         * innerPadding already includes:
-         * - Status bar height
-         * - TopAppBar height
-         *
-         * Bottom bar padding is NOT included
-         * (because MainActivity hides it for this screen)
-         */
         Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
                 .background(colorResource(id = R.color.gray))
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 12.dp, vertical = 16.dp)
+                .padding(16.dp)
         ) {
-
-            Text(
-                text = "Hello, this is my setting screen",
-                fontSize = 18.sp
-            )
+            Text("Hello, this is my setting screen", fontSize = 18.sp)
         }
     }
 }
-
-
-
 
 
 

@@ -88,7 +88,10 @@ class MainActivity : ComponentActivity() {
                 // - bottom navigation bar
                 AppNavHost(
                     navController = navController,
-                    modifier = Modifier.padding(paddingValues)
+                    modifier = Modifier.padding(
+                        bottom = paddingValues.calculateBottomPadding()
+                    )
+//                    modifier = Modifier.padding(paddingValues)
                 )
 //                AppNavHost(navController,
 //                    Modifier
