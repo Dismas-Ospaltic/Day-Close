@@ -1,58 +1,6 @@
 package com.diinc.dayclose
 
-//import android.os.Bundle
-//import androidx.activity.ComponentActivity
-//import androidx.activity.compose.setContent
-//import androidx.activity.enableEdgeToEdge
-//import androidx.compose.foundation.layout.fillMaxSize
-//import androidx.compose.foundation.layout.padding
-//import androidx.compose.material3.Scaffold
-//import androidx.compose.material3.Text
-//import androidx.compose.runtime.Composable
-//import androidx.compose.ui.Modifier
-//import androidx.compose.ui.tooling.preview.Preview
-//import com.diinc.dayclose.ui.theme.DayCloseTheme
-//
-//class MainActivity : ComponentActivity() {
-//    override fun onCreate(savedInstanceState: Bundle?) {
-//        super.onCreate(savedInstanceState)
-//        enableEdgeToEdge()
-//        setContent {
-//            DayCloseTheme {
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Greeting(
-//                        name = "Android",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-//                }
-//            }
-//        }
-//    }
-//}
-//
-//@Composable
-//fun Greeting(name: String, modifier: Modifier = Modifier) {
-//    Text(
-//        text = "Hello $name!",
-//        modifier = modifier
-//    )
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    DayCloseTheme {
-//        Greeting("Android")
-//    }
-//}
-
-
-
-
 import compose.icons.fontawesomeicons.solid.ChartBar
-import compose.icons.fontawesomeicons.solid.TruckMoving
-
-
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
@@ -135,10 +83,17 @@ class MainActivity : ComponentActivity() {
                 }
 
             ) { paddingValues ->
-                AppNavHost(navController,
-                    Modifier
-                        .padding(paddingValues)
-                        .windowInsetsPadding(WindowInsets.systemBars))
+                // 🔑 This padding now represents:
+                // - status bar
+                // - bottom navigation bar
+                AppNavHost(
+                    navController = navController,
+                    modifier = Modifier.padding(paddingValues)
+                )
+//                AppNavHost(navController,
+//                    Modifier
+//                        .padding(paddingValues)
+//                        .windowInsetsPadding(WindowInsets.systemBars))
             }
         }
     }
@@ -154,7 +109,7 @@ fun BottomNavigationBar(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination?.route
 
-    val screens = listOf(Screen.MainApp,Screen.Settings)
+    val screens = listOf(Screen.MainApp,Screen.HistoryData,Screen.Settings)
 
     val backgroundColor = colorResource(id = R.color.bottom_bar_background)
     val selectedColor = colorResource(id = R.color.tab_selected)

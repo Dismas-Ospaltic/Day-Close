@@ -29,16 +29,75 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.ArrowLeft
 
 
+//@OptIn(ExperimentalMaterial3Api::class)
+//@Composable
+//fun AppDetailScreen(navController: NavController) {
+//    val backgroundColor = colorResource(id = R.color.seaweed)
+////    StatusBarColor(backgroundColor)
+//
+//    Scaffold(
+//        topBar = {
+//            CenterAlignedTopAppBar(
+//                title = { Text("App Details", color = Color.White) },
+//                navigationIcon = {
+//                    IconButton(onClick = { navController.popBackStack() }) {
+//                        Icon(
+//                            imageVector = FontAwesomeIcons.Solid.ArrowLeft,
+//                            contentDescription = "Back",
+//                            tint = Color.White,
+//                            modifier = Modifier.size(24.dp)
+//                        )
+//                    }
+//                },
+//                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+//                    containerColor = backgroundColor
+//                )
+//            )
+//        },
+//    ) { paddingValues ->
+//        Column(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(paddingValues)          // ✅ handles system insets
+//                .background(colorResource(id = R.color.gray))
+//                .verticalScroll(rememberScrollState())
+//                .padding(horizontal = 12.dp)    // ✅ your own content padding
+//        ) {
+//            // Your screen content here
+//
+//
+//            Text("hello this is my details screen")
+//        }
+//    }
+//}
+//
+//
+//
+//
+//
+//
+//
+//@Preview(showBackground = true)
+//@Composable
+//fun AppDetailScreenPreview() {
+//    AppDetailScreen(navController = rememberNavController())
+//}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AppDetailScreen(navController: NavController) {
-    val backgroundColor = colorResource(id = R.color.seaweed)
-//    StatusBarColor(backgroundColor)
+
+    val topBarColor = colorResource(id = R.color.seaweed)
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("App Details", color = Color.White) },
+                title = {
+                    Text(
+                        text = "App Details",
+                        color = Color.White
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -50,35 +109,33 @@ fun AppDetailScreen(navController: NavController) {
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = backgroundColor
+                    containerColor = topBarColor
                 )
             )
-        },
-    ) { paddingValues ->
+        }
+    ) { innerPadding ->
+
+        /**
+         * innerPadding already includes:
+         * - Status bar height
+         * - TopAppBar height
+         *
+         * Bottom bar padding is NOT included
+         * (because MainActivity hides it for this screen)
+         */
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)          // ✅ handles system insets
+                .padding(innerPadding)
                 .background(colorResource(id = R.color.gray))
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 12.dp)    // ✅ your own content padding
+                .padding(horizontal = 12.dp, vertical = 16.dp)
         ) {
-            // Your screen content here
 
-
-            Text("hello this is my details screen")
+            Text(
+                text = "Hello, this is my details screen",
+                fontSize = 18.sp
+            )
         }
     }
-}
-
-
-
-
-
-
-
-@Preview(showBackground = true)
-@Composable
-fun AppDetailScreenPreview() {
-    AppDetailScreen(navController = rememberNavController())
 }

@@ -17,12 +17,12 @@ import com.diinc.dayclose.ui_screens.SettingScreen
  * This gives you type safety instead of raw strings everywhere.
  */
 sealed class Screen(val route: String) {
-    object MainApp : Screen("main_app")
+    object MainApp : Screen("home")
     object Settings : Screen("settings")
 
     object AppDetails: Screen("appDetails")
 
-    object HistoryData: Screen("historyData")
+    object HistoryData: Screen("history")
 }
 
 @OptIn(ExperimentalAnimationApi::class)

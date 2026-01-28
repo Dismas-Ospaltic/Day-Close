@@ -28,20 +28,34 @@ fun HistoryScreen(navController: NavController) {
 //    val backgroundColor = colorResource(id = R.color.punch_red)
 //    StatusBarColor(backgroundColor)
 
-    Scaffold { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)          // ✅ handles system insets
-                .background(colorResource(id = R.color.gray))
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 12.dp)    // ✅ your own content padding
-        ) {
-            // Your screen content here
+//    Scaffold { paddingValues ->
+//        Column(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(paddingValues)          // ✅ handles system insets
+//                .background(colorResource(id = R.color.gray))
+//                .verticalScroll(rememberScrollState())
+//                .padding(horizontal = 12.dp)    // ✅ your own content padding
+//        ) {
+//            // Your screen content here
+//
+//
+//            Text("hello this is my history screen")
+//        }
+//    }
 
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.gray))
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 12.dp, vertical = 16.dp)
+    ) {
 
-            Text("hello this is my history screen")
-        }
+        Text(
+            text = "hello this is my history screen",
+            fontSize = 18.sp
+        )
     }
 }
 

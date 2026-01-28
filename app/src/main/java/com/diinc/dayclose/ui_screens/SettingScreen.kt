@@ -28,13 +28,17 @@ import compose.icons.fontawesomeicons.solid.ArrowLeft
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingScreen(navController: NavController) {
-    val backgroundColor = colorResource(id = R.color.seaweed)
-//    StatusBarColor(backgroundColor)
+    val topBarColor = colorResource(id = R.color.seaweed)
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Settings", color = Color.White) },
+                title = {
+                    Text(
+                        text = "App Settings",
+                        color = Color.White
+                    )
+                },
                 navigationIcon = {
                     IconButton(onClick = { navController.popBackStack() }) {
                         Icon(
@@ -46,23 +50,33 @@ fun SettingScreen(navController: NavController) {
                     }
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = backgroundColor
+                    containerColor = topBarColor
                 )
             )
-        },
-    ) { paddingValues ->
+        }
+    ) { innerPadding ->
+
+        /**
+         * innerPadding already includes:
+         * - Status bar height
+         * - TopAppBar height
+         *
+         * Bottom bar padding is NOT included
+         * (because MainActivity hides it for this screen)
+         */
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)          // ✅ handles system insets
+                .padding(innerPadding)
                 .background(colorResource(id = R.color.gray))
                 .verticalScroll(rememberScrollState())
-                .padding(horizontal = 12.dp)    // ✅ your own content padding
+                .padding(horizontal = 12.dp, vertical = 16.dp)
         ) {
-            // Your screen content here
 
-
-            Text("hello this is my setting screen")
+            Text(
+                text = "Hello, this is my setting screen",
+                fontSize = 18.sp
+            )
         }
     }
 }

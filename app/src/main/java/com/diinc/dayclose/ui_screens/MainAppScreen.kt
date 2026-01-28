@@ -29,20 +29,35 @@ fun MainAppScreen(navController: NavController) {
 //    val backgroundColor = colorResource(id = R.color.punch_red)
 //    StatusBarColor(backgroundColor)
 
-    Scaffold { paddingValues ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)          // ✅ handles system insets
-                .background(colorResource(id = R.color.gray))
-                .verticalScroll(rememberScrollState())
-                .padding(horizontal = 12.dp)    // ✅ your own content padding
-        ) {
-            // Your screen content here
+//    Scaffold { paddingValues ->
+//        Column(
+//            modifier = Modifier
+//                .fillMaxSize()
+//                .padding(paddingValues)          // ✅ handles system insets
+//                .background(colorResource(id = R.color.gray))
+//                .verticalScroll(rememberScrollState())
+//                .padding(horizontal = 12.dp)    // ✅ your own content padding
+//        ) {
+//            // Your screen content here
+//
+//
+//            Text("hello this is my main screen")
+//        }
+//    }
 
 
-            Text("hello this is my main screen")
-        }
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(id = R.color.gray))
+            .verticalScroll(rememberScrollState())
+            .padding(horizontal = 12.dp, vertical = 16.dp)
+    ) {
+
+        Text(
+            text = "Hello, this is my main screen",
+            fontSize = 18.sp
+        )
     }
 }
 
