@@ -48,14 +48,15 @@ fun HistoryScreen(navController: NavController) {
         modifier = Modifier
             .fillMaxSize()
             .background(colorResource(id = R.color.gray))
+            // 👇 THIS is the key line
+            // It pushes CONTENT below the status bar
+            .statusBarsPadding()
             .verticalScroll(rememberScrollState())
             .padding(horizontal = 12.dp, vertical = 16.dp)
     ) {
 
-        Text(
-            text = "hello this is my history screen",
-            fontSize = 18.sp
-        )
+
+
     }
 }
 
