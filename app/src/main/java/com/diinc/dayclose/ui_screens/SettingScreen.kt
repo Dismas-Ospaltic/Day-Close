@@ -85,20 +85,11 @@ fun SettingScreen(navController: NavController) {
     Scaffold(
         topBar = {
             TopAppBar(
-                title = {
-                    Text("App Settings", color = Color.White)
-                },
-                navigationIcon = {
-                    IconButton(onClick = { navController.popBackStack() }) {
-                        Icon(
-                            imageVector = FontAwesomeIcons.Solid.ArrowLeft,
-                            contentDescription = "Back",
-                            tint = Color.White
-                        )
-                    }
-                },
+                title = { Text("App Settings",color = Color.White) },
                 colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = backgroundColor
+                    containerColor = backgroundColor,
+                    titleContentColor = Color.White,
+                    navigationIconContentColor = Color.White
                 )
             )
         }
@@ -107,7 +98,14 @@ fun SettingScreen(navController: NavController) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(//innerPadding
+                    start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
+                    top = innerPadding.calculateTopPadding(),
+                    end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
+                    bottom = innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                        //innerPadding.calculateBottomPadding()
+
+                )
                 .background(colorResource(id = R.color.gray))
                 .verticalScroll(rememberScrollState())
                 .padding(16.dp)

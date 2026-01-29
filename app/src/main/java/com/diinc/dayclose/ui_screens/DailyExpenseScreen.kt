@@ -115,7 +115,8 @@ fun DailyExpenseScreen(navController: NavController, dateId: String) {
                         start = innerPadding.calculateStartPadding(LocalLayoutDirection.current),
                     top = innerPadding.calculateTopPadding(),
                     end = innerPadding.calculateEndPadding(LocalLayoutDirection.current),
-                    bottom = innerPadding.calculateBottomPadding() + 80.dp
+                    bottom =innerPadding.calculateEndPadding(LocalLayoutDirection.current)
+                        //innerPadding.calculateBottomPadding()
                 )
                 .background(colorResource(id = R.color.gray))
                 .verticalScroll(rememberScrollState())

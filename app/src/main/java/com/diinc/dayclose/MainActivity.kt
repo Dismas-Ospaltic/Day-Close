@@ -14,15 +14,27 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
 import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import com.diinc.dayclose.R
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.view.WindowCompat
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -78,7 +90,8 @@ class MainActivity : ComponentActivity() {
                 bottomBar = {
 //                    BottomNavigationBar(navController)
                     if (currentRoute !in hideBottomBarScreens) {
-                        BottomNavigationBar(navController)
+//                        BottomNavigationBar(navController)
+                        BottomNavigationBarModern(navController)
                     }
                 },
                 floatingActionButton = {
@@ -110,103 +123,191 @@ class MainActivity : ComponentActivity() {
 
 }
 
+//@Composable
+//fun BottomNavigationBar(navController: NavHostController) {
+//    val navBackStackEntry by navController.currentBackStackEntryAsState()
+//    val currentDestination = navBackStackEntry?.destination?.route
+//
+//    val screens = listOf(Screen.MainApp,Screen.HistoryData,Screen.Settings)
+//
+//    val backgroundColor = colorResource(id = R.color.bottom_bar_background)
+//    val selectedColor = colorResource(id = R.color.tab_selected)
+//    val unselectedColor = colorResource(id = R.color.tab_unselected)
+//    val tabIndicatorColor = colorResource(id = R.color.tab_indicator)
+//
+//    Column{
+//        // Top Divider
+//        HorizontalDivider(
+//            thickness = 1.dp, // Adjust thickness as needed
+//            color =  colorResource(id = R.color.yale_blue)
+//        )
+//        NavigationBar(
+//            containerColor = backgroundColor
+//        ) {
+//            screens.forEach { screen ->
+//                val isSelected = currentDestination == screen.route
+//
+//                NavigationBarItem(
+//                    selected = isSelected,
+//                    onClick = {
+//                        if (currentDestination != screen.route) {
+//                            navController.navigate(screen.route) {
+//                                popUpTo(Screen.MainApp.route) { inclusive = false }
+//                                launchSingleTop = true
+//                            }
+//                        }
+//                    },
+//                    icon = {
+//
+//                        when (screen) {
+//                            is Screen.MainApp -> {
+//                                Icon(
+//                                    imageVector = FontAwesomeIcons.Solid.FileInvoiceDollar,
+//                                    contentDescription = "Home",
+//                                    tint = if (isSelected) selectedColor else unselectedColor,
+//                                    modifier = Modifier.size(24.dp)
+//                                )
+//                            }
+//
+//                            is Screen.HistoryData -> {
+//                                Icon(
+//                                    imageVector = FontAwesomeIcons.Solid.ListAlt,
+//                                    contentDescription = "history",
+//                                    tint = if (isSelected) selectedColor else unselectedColor,
+//                                    modifier = Modifier.size(24.dp)
+//                                )
+//                            }
+//
+//                            // cog icon from font awesome icons
+//                            is Screen.Settings -> {
+//                                Icon(
+//                                    imageVector = FontAwesomeIcons.Solid.UserCog,
+//                                    contentDescription = "setting",
+//                                    tint = if (isSelected) selectedColor else unselectedColor,
+//                                    modifier = Modifier.size(24.dp)
+//                                )
+//                            }
+//
+//                            else ->  {
+//                                Icon(
+//                                    imageVector = FontAwesomeIcons.Solid.Home,
+//                                    contentDescription = "home",
+//                                    tint = if (isSelected) selectedColor else unselectedColor,
+//                                    modifier = Modifier.size(24.dp)
+//                                )
+//                            }// Home icon from font awesome icons  // Fallback icon
+//                        }
+//
+//                    },
+//                    label = {
+//                        Text(
+//                            text = screen.route.replaceFirstChar { it.titlecase(Locale.ROOT) },
+//                            color = if (isSelected) selectedColor else unselectedColor // Apply custom colors
+//                        )
+//                    },
+//                    colors = NavigationBarItemDefaults.colors(
+//                        selectedIconColor = selectedColor,
+//                        unselectedIconColor = unselectedColor,
+//                        selectedTextColor = selectedColor,
+//                        unselectedTextColor = unselectedColor,
+//                        indicatorColor = tabIndicatorColor // Change the background color of selected tab
+//                    )
+//                )
+//            }
+//        }
+//    }
+//}
+
+
 @Composable
-fun BottomNavigationBar(navController: NavHostController) {
+fun BottomNavigationBarModern(navController: NavHostController) {
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination?.route
 
-    val screens = listOf(Screen.MainApp,Screen.HistoryData,Screen.Settings)
+    val screens = listOf(Screen.MainApp, Screen.HistoryData, Screen.Settings)
 
     val backgroundColor = colorResource(id = R.color.bottom_bar_background)
     val selectedColor = colorResource(id = R.color.tab_selected)
     val unselectedColor = colorResource(id = R.color.tab_unselected)
-    val tabIndicatorColor = colorResource(id = R.color.tab_indicator)
+    val indicatorColor = colorResource(id = R.color.tab_indicator)
 
-    Column{
-        // Top Divider
-        HorizontalDivider(
-            thickness = 1.dp, // Adjust thickness as needed
-            color =  colorResource(id = R.color.yale_blue)
-        )
-        NavigationBar(
-            containerColor = backgroundColor
+    Surface(
+        color = backgroundColor,
+        shadowElevation = 0.dp,
+        modifier = Modifier.fillMaxWidth()
+            .navigationBarsPadding() // <-- adds safe bottom padding
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             screens.forEach { screen ->
                 val isSelected = currentDestination == screen.route
 
-                NavigationBarItem(
-                    selected = isSelected,
-                    onClick = {
-                        if (currentDestination != screen.route) {
-                            navController.navigate(screen.route) {
-                                popUpTo(Screen.MainApp.route) { inclusive = false }
-                                launchSingleTop = true
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier
+                        .clickable {
+                            if (currentDestination != screen.route) {
+                                navController.navigate(screen.route) {
+                                    popUpTo(Screen.MainApp.route) { inclusive = false }
+                                    launchSingleTop = true
+                                }
                             }
                         }
-                    },
-                    icon = {
-
-                        when (screen) {
-                            is Screen.MainApp -> {
-                                Icon(
-                                    imageVector = FontAwesomeIcons.Solid.FileInvoiceDollar,
-                                    contentDescription = "Home",
-                                    tint = if (isSelected) selectedColor else unselectedColor,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-
-                            is Screen.HistoryData -> {
-                                Icon(
-                                    imageVector = FontAwesomeIcons.Solid.ListAlt,
-                                    contentDescription = "history",
-                                    tint = if (isSelected) selectedColor else unselectedColor,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-
-                            // cog icon from font awesome icons
-                            is Screen.Settings -> {
-                                Icon(
-                                    imageVector = FontAwesomeIcons.Solid.UserCog,
-                                    contentDescription = "setting",
-                                    tint = if (isSelected) selectedColor else unselectedColor,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }
-
-                            else ->  {
-                                Icon(
-                                    imageVector = FontAwesomeIcons.Solid.Home,
-                                    contentDescription = "home",
-                                    tint = if (isSelected) selectedColor else unselectedColor,
-                                    modifier = Modifier.size(24.dp)
-                                )
-                            }// Home icon from font awesome icons  // Fallback icon
-                        }
-
-                    },
-                    label = {
-                        Text(
-                            text = screen.route.replaceFirstChar { it.titlecase(Locale.ROOT) },
-                            color = if (isSelected) selectedColor else unselectedColor // Apply custom colors
-                        )
-                    },
-                    colors = NavigationBarItemDefaults.colors(
-                        selectedIconColor = selectedColor,
-                        unselectedIconColor = unselectedColor,
-                        selectedTextColor = selectedColor,
-                        unselectedTextColor = unselectedColor,
-                        indicatorColor = tabIndicatorColor // Change the background color of selected tab
+                        .padding(horizontal = 8.dp)
+                ) {
+                    // Icon
+                    Icon(
+                        imageVector = when (screen) {
+                            is Screen.MainApp -> FontAwesomeIcons.Solid.FileInvoiceDollar
+                            is Screen.HistoryData -> FontAwesomeIcons.Solid.ListAlt
+                            is Screen.Settings -> FontAwesomeIcons.Solid.UserCog
+                            else -> FontAwesomeIcons.Solid.Home
+                        },
+                        contentDescription = screen.route,
+                        tint = if (isSelected) selectedColor else unselectedColor,
+                        modifier = Modifier.size(22.dp)
                     )
-                )
+
+                    Spacer(modifier = Modifier.height(2.dp))
+
+                    // Label
+                    Text(
+                        text = screen.route.replaceFirstChar { it.titlecase(Locale.ROOT) },
+                        color = if (isSelected) selectedColor else unselectedColor,
+                        fontSize = 11.sp
+                    )
+
+                    // Small underline indicator for selected tab
+                    if (isSelected) {
+                        Spacer(
+                            modifier = Modifier
+                                .height(2.dp)
+                                .width(24.dp)
+                                .background(indicatorColor, shape = RoundedCornerShape(1.dp))
+                                .padding(top = 2.dp)
+                        )
+                    } else {
+                        Spacer(modifier = Modifier.height(4.dp)) // placeholder
+                    }
+                }
             }
         }
     }
 }
 
+//@Preview(showBackground = true)
+//@Composable
+//fun BottomNavigationBarPreview() {
+//    BottomNavigationBar(navController = rememberNavController())
+//}
+
 @Preview(showBackground = true)
 @Composable
-fun BottomNavigationBarPreview() {
-    BottomNavigationBar(navController = rememberNavController())
+fun BottomNavigationBarModernPreview() {
+    BottomNavigationBarModern(navController = rememberNavController())
 }
