@@ -35,8 +35,11 @@ import compose.icons.fontawesomeicons.Solid
 import compose.icons.fontawesomeicons.solid.ChartLine
 import compose.icons.fontawesomeicons.solid.ClipboardList
 import compose.icons.fontawesomeicons.solid.Cog
+import compose.icons.fontawesomeicons.solid.FileInvoiceDollar
 import compose.icons.fontawesomeicons.solid.Home
+import compose.icons.fontawesomeicons.solid.ListAlt
 import compose.icons.fontawesomeicons.solid.StoreAlt
+import compose.icons.fontawesomeicons.solid.UserCog
 import compose.icons.fontawesomeicons.solid.Warehouse
 import java.util.Locale
 
@@ -69,7 +72,7 @@ class MainActivity : ComponentActivity() {
             val currentRoute = navBackStackEntry?.destination?.route
 
             // Define screens where the bottom bar should be hidden
-            val hideBottomBarScreens = listOf(Screen.AppDetails.route)
+            val hideBottomBarScreens = listOf(Screen.AppDetails.route,Screen.DailyExpense.route)
 
             Scaffold(
                 bottomBar = {
@@ -146,7 +149,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                         when (screen) {
                             is Screen.MainApp -> {
                                 Icon(
-                                    imageVector = FontAwesomeIcons.Solid.StoreAlt,
+                                    imageVector = FontAwesomeIcons.Solid.FileInvoiceDollar,
                                     contentDescription = "Home",
                                     tint = if (isSelected) selectedColor else unselectedColor,
                                     modifier = Modifier.size(24.dp)
@@ -155,7 +158,7 @@ fun BottomNavigationBar(navController: NavHostController) {
 
                             is Screen.HistoryData -> {
                                 Icon(
-                                    imageVector = FontAwesomeIcons.Solid.ChartBar,
+                                    imageVector = FontAwesomeIcons.Solid.ListAlt,
                                     contentDescription = "history",
                                     tint = if (isSelected) selectedColor else unselectedColor,
                                     modifier = Modifier.size(24.dp)
@@ -165,7 +168,7 @@ fun BottomNavigationBar(navController: NavHostController) {
                             // cog icon from font awesome icons
                             is Screen.Settings -> {
                                 Icon(
-                                    imageVector = FontAwesomeIcons.Solid.Cog,
+                                    imageVector = FontAwesomeIcons.Solid.UserCog,
                                     contentDescription = "setting",
                                     tint = if (isSelected) selectedColor else unselectedColor,
                                     modifier = Modifier.size(24.dp)

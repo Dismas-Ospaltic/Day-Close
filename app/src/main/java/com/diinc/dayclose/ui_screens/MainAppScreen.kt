@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Create
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -27,7 +28,11 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.diinc.dayclose.navigationgraph.Screen
 import com.diinc.dayclose.utils.getGreeting
+import compose.icons.FontAwesomeIcons
+import compose.icons.fontawesomeicons.Solid
+import compose.icons.fontawesomeicons.solid.FileInvoiceDollar
 
 
 @Composable
@@ -73,12 +78,26 @@ fun MainAppScreen(navController: NavController) {
                 amount="Kes 20000",
             )
 
+            Spacer(modifier = Modifier.height(16.dp))
+
+            ExpenseCashCard(
+                amount= "Kes 30000"
+            )
+
             DayActionsRow(
                 onAddExpense = {
                     // navigate to Add Expense screen
                 },
                 onCloseDay = {
                     // handle day closing logic
+                },
+                onAddOpenCash ={
+
+                },
+                onViewAllExpense = {
+//              navController.navigate(Screen.DailyExpense.route)
+                    val todayDate: String = "29-01-2026"
+                    navController.navigate("dailyExpense/$todayDate")
                 }
             )
 
@@ -257,6 +276,43 @@ fun ExpectedProfitCashCard(
 }
 
 
+
+
+@Composable
+fun ExpenseCashCard(
+    amount: String,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth()                    // ✅ takes full screen width
+            .padding(horizontal = 16.dp)       // ✅ outer spacing from screen edges
+            .background(
+                color = colorResource(id = R.color.light_background),
+                shape = RoundedCornerShape(20.dp)
+            )
+            .padding(24.dp)                    // ✅ big inner padding
+    ) {
+        Column {
+            Text(
+                text = "Today's Expenses",
+                color = colorResource(id=R.color.golden_sand),
+                fontSize = 16.sp                // slightly bigger label
+            )
+
+            Spacer(modifier = Modifier.height(12.dp))
+
+            Text(
+                text = amount,
+                color = colorResource(id = R.color.golden_orange),
+                fontSize = 28.sp,               // big emphasis
+                fontWeight = FontWeight.Bold
+            )
+        }
+    }
+}
+
+
 //action buttons
 @Composable
 fun ActionButton(
@@ -282,7 +338,9 @@ fun ActionButton(
             Icon(
                 imageVector = icon,
                 contentDescription = text,
-                tint = Color.White
+                tint = Color.White,
+                modifier = Modifier.size(24.dp)
+
             )
 
             Text(
@@ -299,32 +357,50 @@ fun ActionButton(
 @Composable
 fun DayActionsRow(
     onAddExpense: () -> Unit,
-    onCloseDay: () -> Unit
+    onCloseDay: () -> Unit,
+    onAddOpenCash: () -> Unit,
+    onViewAllExpense: () -> Unit
 ) {
-    Row(
+    FlowRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        verticalArrangement = Arrangement.spacedBy(12.dp),
+        maxItemsInEachRow = 2   // ✅ two buttons per row
     ) {
+
+        ActionButton(
+            text = "Opening Cash",
+            icon = Icons.Default.Add,
+            backgroundColor = R.color.seaweed,
+            onClick = onAddOpenCash
+        )
 
         ActionButton(
             text = "Add Expense",
             icon = Icons.Default.Create,
-            backgroundColor = R.color.seaweed,
-            onClick = onAddExpense,
-            modifier = Modifier.weight(1f)
+            backgroundColor = R.color.yale_blue,
+            onClick = onAddExpense
         )
 
         ActionButton(
             text = "Close Day",
             icon = Icons.Default.Lock,
             backgroundColor = R.color.oxford_navy,
-            onClick = onCloseDay,
-            modifier = Modifier.weight(1f)
+            onClick = onCloseDay
+        )
+
+        ActionButton(
+            text = "View Expenses",
+            icon = FontAwesomeIcons.Solid.FileInvoiceDollar,
+            backgroundColor = R.color.oxford_navy,
+            onClick = onViewAllExpense
         )
     }
 }
+
+
 
 
 

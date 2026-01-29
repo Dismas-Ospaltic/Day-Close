@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 //google is moving away fro accompanist navigation now we use androidx.navigation.compose
 import androidx.navigation.NavHostController
 import com.diinc.dayclose.ui_screens.AppDetailScreen
+import com.diinc.dayclose.ui_screens.DailyExpenseScreen
 import com.diinc.dayclose.ui_screens.HistoryScreen
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
@@ -23,6 +24,10 @@ sealed class Screen(val route: String) {
     object AppDetails: Screen("appDetails")
 
     object HistoryData: Screen("history")
+
+
+    object DailyExpense: Screen("dailyExpense/{dateId}")
+
 }
 
 @OptIn(ExperimentalAnimationApi::class)
@@ -79,6 +84,16 @@ fun AppNavHost(
 
         composable(Screen.HistoryData.route) {
             HistoryScreen(navController)
+        }
+
+//        composable(Screen.DailyExpense.route){
+//            DailyExpenseScreen(navController)
+//        }
+
+
+        composable(Screen.DailyExpense.route) { backStackEntry ->
+            val dateId = backStackEntry.arguments?.getString("dateId") ?: "Unknown"
+            DailyExpenseScreen(navController, dateId)
         }
     }
 }
