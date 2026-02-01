@@ -48,6 +48,8 @@ import com.patrykandpatrick.vico.core.entry.entryOf
 import com.patrykandpatrick.vico.core.formatter.DecimalFormatValueFormatter
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
+import compose.icons.fontawesomeicons.solid.MoneyBillAlt
+import compose.icons.fontawesomeicons.solid.MoneyBillWaveAlt
 import compose.icons.fontawesomeicons.solid.Search
 
 import java.time.LocalDate
@@ -128,18 +130,21 @@ fun HistoryScreen(navController: NavController) {
     val activeRange = TimeRange.entries[pagerState.currentPage]
 
 
-
-
-    val mockDayCloses = List(15) { index ->
-        DayCloseItem(
-            date = "2026-01-${(index + 1).toString().padStart(2, '0')}",
-            openingCash = "20,000",
-            closingCash = "${20_000 + index * 1_500}",
-            netProfit = "${5_000 - index * 300}",
-            totalExpense = "${3_000 + index * 200}",
-            status = if (index % 2 == 0) "Above average" else "Below average"
-        )
+    val mockDayCloses = remember {
+        generateMockDayCloses()
     }
+
+
+//    val mockDayCloses = List(15) { index ->
+//        DayCloseItem(
+//            date = "2026-01-${(index + 1).toString().padStart(2, '0')}",
+//            openingCash = "20,000",
+//            closingCash = "${20_000 + index * 1_500}",
+//            netProfit = "${5_000 - index * 300}",
+//            totalExpense = "${3_000 + index * 200}",
+//            status = if (index % 2 == 0) "Above average" else "Below average"
+//        )
+//    }
 
 
 
@@ -156,11 +161,19 @@ fun HistoryScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(colorResource(id = R.color.gray))
-            .statusBarsPadding()
+            .background(colorResource(id = R.color.border_color))
+
             .verticalScroll(rememberScrollState())
-            .padding(horizontal = 12.dp, vertical = 16.dp)
+
     ) {
+
+
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .statusBarsPadding()
+                .padding(horizontal = 12.dp, vertical = 16.dp)
+        ) {
         HistIntroHeader()
 
         // 2. Range Selector (Weekly, Monthly, Yearly)
@@ -188,7 +201,9 @@ fun HistoryScreen(navController: NavController) {
         ) { page ->
             // In a real app, you'd fetch data here: getProfitData(activeRange, selectedDate)
             val mockData = remember(selectedDate, activeRange) {
-                List(if (activeRange == TimeRange.WEEKLY) 7 else 4) { (-5000..20000).random().toFloat() }
+                List(if (activeRange == TimeRange.WEEKLY) 7 else 4) {
+                    (-5000..20000).random().toFloat()
+                }
             }
 
             val mockLabels = when (activeRange) {
@@ -376,7 +391,7 @@ fun HistoryScreen(navController: NavController) {
                     Icon(
                         imageVector = FontAwesomeIcons.Solid.Search,
                         contentDescription = "Search Icon",
-                        tint = colorResource(id=R.color.oxford_navy),
+                        tint = colorResource(id = R.color.oxford_navy),
                         modifier = Modifier.size(24.dp)
                     )
                 },
@@ -432,14 +447,7 @@ fun HistoryScreen(navController: NavController) {
         }
 
 
-
-
-
-
-
-
-
-
+    }
     }
 }
 
@@ -672,16 +680,33 @@ fun DayCloseCard(item: DayCloseItem) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.spacedBy(4.dp)
             ) {
-                CashCard(
-                    title = "Opening Cash",
-                    amount = item.openingCash,
-                    backgroundColor = R.color.light_background,
+
+
+//                CashCard(
+//                    title = "Opening Cash",
+//                    amount = item.openingCash,
+//                    backgroundColor = R.color.light_background,
+//                    modifier = Modifier.weight(1f)
+//                )
+//                CashCard(
+//                    title = "Closing Cash",
+//                    amount = item.closingCash,
+//                    backgroundColor = R.color.light_background,
+//                    modifier = Modifier.weight(1f)
+//                )
+
+                SmallStatCard(
+                    title = "Opening",
+                    amount = "12,500",
+                    icon = FontAwesomeIcons.Solid.MoneyBillAlt,
+                    color = colorResource(id = R.color.seaweed),
                     modifier = Modifier.weight(1f)
                 )
-                CashCard(
-                    title = "Closing Cash",
-                    amount = item.closingCash,
-                    backgroundColor = R.color.light_background,
+                SmallStatCard(
+                    title = "Closing",
+                    amount = "18,300",
+                    icon = FontAwesomeIcons.Solid.MoneyBillWaveAlt,
+                    color = colorResource(id = R.color.oxford_navy),
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -747,3 +772,54 @@ data class DayCloseItem(
     val totalExpense: String,
     val status: String
 )
+
+
+
+//Helper: date range generator
+
+fun generateMockDayCloses(): List<DayCloseItem> {
+    val startDate = LocalDate.of(2025, 1, 1)
+    val endDate = LocalDate.of(2026, 2, 1)
+
+    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+    val list = mutableListOf<DayCloseItem>()
+    var date = startDate
+    var dayIndex = 0
+
+    while (!date.isAfter(endDate)) {
+        val openingCash = 20_000
+        val dailySales = (5_000..15_000).random()
+        val expenses = (2_000..8_000).random()
+        val closingCash = openingCash + dailySales - expenses
+        val netProfit = dailySales - expenses
+
+        list.add(
+            DayCloseItem(
+                date = date.format(formatter),
+                openingCash = openingCash.formatMoney(),
+                closingCash = closingCash.formatMoney(),
+                netProfit = netProfit.formatMoney(),
+                totalExpense = expenses.formatMoney(),
+                status = when {
+                    netProfit > 5_000 -> "Excellent"
+                    netProfit > 0 -> "Above average"
+                    else -> "Loss"
+                }
+            )
+        )
+
+        date = date.plusDays(1)
+        dayIndex++
+    }
+
+    return list
+}
+
+
+//Money formatter (nice UI)
+fun Int.formatMoney(): String {
+    return "%,d".format(this)
+}
+
+

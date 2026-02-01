@@ -17,8 +17,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import com.diinc.dayclose.R
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.colorResource
@@ -32,91 +34,333 @@ import com.diinc.dayclose.navigationgraph.Screen
 import com.diinc.dayclose.utils.getGreeting
 import compose.icons.FontAwesomeIcons
 import compose.icons.fontawesomeicons.Solid
+import compose.icons.fontawesomeicons.solid.ChartBar
 import compose.icons.fontawesomeicons.solid.FileInvoiceDollar
+import compose.icons.fontawesomeicons.solid.MoneyBillAlt
+import compose.icons.fontawesomeicons.solid.MoneyBillWaveAlt
+
+
 
 
 @Composable
 fun MainAppScreen(navController: NavController) {
+    val scrollState = rememberScrollState()
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            // 👇 This background will go BEHIND the status bar
-            .background(colorResource(id = R.color.gray))
-    ) {
+
 
         Column(
             modifier = Modifier
                 .fillMaxSize()
 
-                // 👇 THIS is the key line
-                // It pushes CONTENT below the status bar
-                .statusBarsPadding()
-
                 // Scrollable content
                 .verticalScroll(rememberScrollState())
 
-                // Your own spacing
-                .padding(horizontal = 12.dp, vertical = 16.dp)
+
+                .background(colorResource(id = R.color.border_color))
         ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
 
-            GreetingHeader(
-                userName = "Diinc Solutions",
-                onProfileClick = {
-                    navController.navigate("settings")
-                }
+
+            // Scrollable content
+//            .verticalScroll(rememberScrollState())
+
+            // Your own spacing
+            .padding(horizontal = 12.dp, vertical = 16.dp)
+
+            .background(colorResource(id = R.color.border_color))
+
+            // 👇 THIS is the key line
+            // It pushes CONTENT below the status bar
+            .statusBarsPadding()
+    ) {
+        // Using a specialized header instead of putting it in the column
+        GreetingHeader(
+            userName = "Diinc Solutions",
+            onProfileClick = { navController.navigate("settings") }
+
+        )
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // 2. SUMMARY SECTION: Cash flow
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            SmallStatCard(
+                title = "Opening",
+                amount = "12,500",
+                icon = FontAwesomeIcons.Solid.MoneyBillAlt,
+                color = colorResource(id = R.color.seaweed),
+                modifier = Modifier.weight(1f)
             )
-
-
-            CashSummaryRow(
-                openingCash = "KES 12,500",
-                closingCash = "KES 18,300"
+            SmallStatCard(
+                title = "Closing",
+                amount = "18,300",
+                icon = FontAwesomeIcons.Solid.MoneyBillWaveAlt,
+                color = colorResource(id = R.color.oxford_navy),
+                modifier = Modifier.weight(1f)
             )
+        }
+        Spacer(modifier = Modifier.height(8.dp))
 
+        // 1. HERO SECTION: Net Profit with Gradient
+        ProfitHeroCard(amount = "KES 20,000")
+        Spacer(modifier = Modifier.height(8.dp))
+        // 3. EXPENSE HIGHLIGHT
+        ExpenseCard(amount = "KES 30,000")
+        Spacer(modifier = Modifier.height(8.dp))
+        // 4. ACTION GRID
+        Text(
+            text = "Quick Actions",
+            fontWeight = FontWeight.Bold,
+            fontSize = 18.sp,
+            modifier = Modifier.padding(top = 8.dp)
+        )
 
-            ExpectedProfitCashCard(
-                amount="Kes 20000",
+        ActionGrid(
+            onAddOpenCash = {},
+            onAddExpense = {},
+            onCloseDay = {},
+            onViewAllExpense = { navController.navigate("dailyExpense/29-01-2026") }
+        )
+    }
+}
+
+}
+
+//@Composable
+//fun ProfitHeroCard(amount: String) {
+//    val gradient = Brush.verticalGradient(
+//        colors = listOf(colorResource(id = R.color.seaweed), colorResource(id = R.color.yale_blue))
+//    )
+//
+//    ElevatedCard(
+//        elevation = CardDefaults.elevatedCardElevation(defaultElevation = 8.dp),
+//        shape = RoundedCornerShape(24.dp),
+//        modifier = Modifier.fillMaxWidth()
+//    ) {
+//        Box(
+//            modifier = Modifier
+//                .background(gradient)
+//                .padding(24.dp)
+//        ) {
+//            Column {
+//                Text("Expected Net Profit", color = Color.White.copy(alpha = 0.8f), fontSize = 14.sp)
+//                Spacer(modifier = Modifier.height(8.dp))
+//                Text(
+//                    text = amount,
+//                    color = Color.White,
+//                    fontSize = 32.sp,
+//                    fontWeight = FontWeight.ExtraBold
+//                )
+//            }
+//            // Background Decorative Circle
+//            Icon(
+//                imageVector = FontAwesomeIcons.Solid.ChartBar,
+//                contentDescription = null,
+//                modifier = Modifier
+//                    .size(80.dp)
+//                    .align(Alignment.BottomEnd)
+//                    .graphicsLayer(alpha = 0.2f),
+//                tint = Color.White
+//            )
+//        }
+//    }
+//}
+
+@Composable
+fun ProfitHeroCard(amount: String) {
+    val gradient = Brush.verticalGradient(
+        colors = listOf(
+            colorResource(id = R.color.seaweed),
+            colorResource(id = R.color.yale_blue)
+        )
+    )
+
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.elevatedCardElevation(8.dp),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = Color.Transparent
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(gradient)
+                .padding(24.dp)
+        ) {
+            Column {
+                Text(
+                    "Expected Net Profit",
+                    color = Color.White.copy(alpha = 0.8f),
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = amount,
+                    color = Color.White,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            }
+
+            Icon(
+                imageVector = FontAwesomeIcons.Solid.ChartBar,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(80.dp)
+                    .align(Alignment.BottomEnd)
+                    .graphicsLayer(alpha = 0.2f),
+                tint = Color.White
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            ExpenseCashCard(
-                amount= "Kes 30000"
-            )
-
-            DayActionsRow(
-                onAddExpense = {
-                    // navigate to Add Expense screen
-                },
-                onCloseDay = {
-                    // handle day closing logic
-                },
-                onAddOpenCash ={
-
-                },
-                onViewAllExpense = {
-//              navController.navigate(Screen.DailyExpense.route)
-                    val todayDate: String = "29-01-2026"
-                    navController.navigate("dailyExpense/$todayDate")
-                }
-            )
-
         }
     }
 }
 
 
-
-
-
-
-@Preview(showBackground = true)
 @Composable
-fun MainAppScreenPreview() {
-    MainAppScreen(navController = rememberNavController())
+fun SmallStatCard(title: String, amount: String, icon: ImageVector, color: Color, modifier: Modifier) {
+    ElevatedCard(
+        colors = CardDefaults.elevatedCardColors(containerColor = Color.White),
+        shape = RoundedCornerShape(20.dp),
+        modifier = modifier
+    ) {
+        Column(modifier = Modifier.padding(16.dp)) {
+            Icon(imageVector = icon, contentDescription = null, tint = color, modifier = Modifier.size(20.dp))
+            Spacer(modifier = Modifier.height(12.dp))
+            Text(title, fontSize = 12.sp, color = Color.Gray)
+            Text(amount, fontSize = 18.sp, fontWeight = FontWeight.Bold, color = color)
+        }
+    }
+}
+
+@Composable
+fun ActionGrid(
+    onAddOpenCash: () -> Unit,
+    onAddExpense: () -> Unit,
+    onCloseDay: () -> Unit,
+    onViewAllExpense: () -> Unit
+) {
+    // A clean 2x2 grid using standard modifiers
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            ModernActionButton("Opening", Icons.Default.Add, colorResource(id = R.color.seaweed), onAddOpenCash, Modifier.weight(1f))
+            ModernActionButton("Expense", Icons.Default.Create, colorResource(id = R.color.yale_blue), onAddExpense, Modifier.weight(1f))
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            ModernActionButton("Close Day", Icons.Default.Lock, colorResource(id = R.color.oxford_navy), onCloseDay, Modifier.weight(1f))
+            ModernActionButton("History", FontAwesomeIcons.Solid.FileInvoiceDollar, colorResource(id = R.color.oxford_navy), onViewAllExpense, Modifier.weight(1f))
+        }
+    }
+}
+
+@Composable
+fun ModernActionButton(text: String, icon: ImageVector, color: Color, onClick: () -> Unit, modifier: Modifier) {
+    Button(
+        onClick = onClick,
+        modifier = modifier.height(64.dp),
+        shape = RoundedCornerShape(16.dp),
+        colors = ButtonDefaults.buttonColors(containerColor = Color.White),
+        elevation = ButtonDefaults.buttonElevation(defaultElevation = 2.dp)
+    ) {
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            Icon(imageVector = icon, contentDescription = null, tint = color, modifier = Modifier.size(24.dp))
+            Text(text, color = color, fontSize = 10.sp, fontWeight = FontWeight.Bold)
+        }
+    }
 }
 
 
+//@Composable
+//fun ExpenseCard(
+//    amount: String,
+//    modifier: Modifier = Modifier
+//) {
+//    Box(
+//        modifier = modifier
+//            .fillMaxWidth()                    // ✅ takes full screen width
+//            .padding(horizontal = 16.dp)       // ✅ outer spacing from screen edges
+//            .background(
+//                color = colorResource(id = R.color.light_background),
+//                shape = RoundedCornerShape(20.dp)
+//            )
+//            .padding(24.dp)                    // ✅ big inner padding
+//    ) {
+//        Column {
+//            Text(
+//                text = "Today's Expenses",
+//                color = colorResource(id=R.color.golden_sand),
+//                fontSize = 16.sp                // slightly bigger label
+//            )
+//
+//            Spacer(modifier = Modifier.height(12.dp))
+//
+//            Text(
+//                text = amount,
+//                color = colorResource(id = R.color.golden_orange),
+//                fontSize = 28.sp,               // big emphasis
+//                fontWeight = FontWeight.Bold
+//            )
+//        }
+//    }
+//}
+
+
+
+@Composable
+fun ExpenseCard(amount: String) {
+    val gradient = Brush.verticalGradient(
+        colors = listOf(
+            colorResource(id = R.color.golden_sand),
+            colorResource(id = R.color.golden_orange)
+        )
+    )
+
+    ElevatedCard(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(24.dp),
+        elevation = CardDefaults.elevatedCardElevation(8.dp),
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = Color.Transparent
+        )
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(gradient)
+                .padding(24.dp)
+        ) {
+            Column {
+                Text(
+                    "Total Expenses",
+                    color = Color.White.copy(alpha = 0.8f),
+                    fontSize = 14.sp
+                )
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(
+                    text = amount,
+                    color = Color.White,
+                    fontSize = 32.sp,
+                    fontWeight = FontWeight.ExtraBold
+                )
+            }
+
+            Icon(
+                imageVector = FontAwesomeIcons.Solid.FileInvoiceDollar,
+                contentDescription = null,
+                modifier = Modifier
+                    .size(80.dp)
+                    .align(Alignment.BottomEnd)
+                    .graphicsLayer(alpha = 0.2f),
+                tint = Color.White
+            )
+        }
+    }
+}
 
 
 @Composable
@@ -128,7 +372,7 @@ fun GreetingHeader(
         modifier = Modifier
             .fillMaxWidth()
             .background(colorResource(id = R.color.light_background),
-                    shape = RoundedCornerShape(16.dp)
+                shape = RoundedCornerShape(16.dp)
             )
             .padding(
                 top = 16.dp,
@@ -136,6 +380,7 @@ fun GreetingHeader(
                 end = 16.dp,
                 bottom = 12.dp
             )
+
 
     ) {
 
@@ -173,236 +418,6 @@ fun GreetingHeader(
 }
 
 
-@Composable
-fun CashSummaryRow(
-    openingCash: String,
-    closingCash: String
-) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 6.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-
-        CashCard(
-            title = "Opening Cash",
-            amount = openingCash,
-            backgroundColor = R.color.light_background,
-            modifier = Modifier.weight(1f)
-        )
-
-        CashCard(
-            title = "Closing Cash",
-            amount = closingCash,
-            backgroundColor = R.color.light_background,
-            modifier = Modifier.weight(1f)
-        )
-    }
-}
-
-
-@Composable
-fun CashCard(
-    title: String,
-    amount: String,
-    backgroundColor: Int,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .background(
-                color = colorResource(id = backgroundColor),
-                shape = RoundedCornerShape(20.dp)   // slightly rounder
-            )
-            .padding(20.dp)                         // ✅ BIG inner padding
-    ) {
-        Column(
-            verticalArrangement = Arrangement.Center
-        ) {
-            Text(
-                text = title,
-                color = colorResource(id = R.color.oxford_navy),
-                fontSize = 16.sp                    // bigger label
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = amount,
-                color = colorResource(id = R.color.oxford_navy),
-                fontSize = 26.sp,                   // bigger amount
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-
-
-
-@Composable
-fun ExpectedProfitCashCard(
-    amount: String,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()                    // ✅ takes full screen width
-            .padding(horizontal = 16.dp)       // ✅ outer spacing from screen edges
-            .background(
-                color = colorResource(id = R.color.light_background),
-                shape = RoundedCornerShape(20.dp)
-            )
-            .padding(24.dp)                    // ✅ big inner padding
-    ) {
-        Column {
-            Text(
-                text = "Expected Net Profit",
-                color = colorResource(id=R.color.seaweed),
-                fontSize = 16.sp                // slightly bigger label
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = amount,
-                color = colorResource(id = R.color.yale_blue),
-                fontSize = 28.sp,               // big emphasis
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-
-
-
-@Composable
-fun ExpenseCashCard(
-    amount: String,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()                    // ✅ takes full screen width
-            .padding(horizontal = 16.dp)       // ✅ outer spacing from screen edges
-            .background(
-                color = colorResource(id = R.color.light_background),
-                shape = RoundedCornerShape(20.dp)
-            )
-            .padding(24.dp)                    // ✅ big inner padding
-    ) {
-        Column {
-            Text(
-                text = "Today's Expenses",
-                color = colorResource(id=R.color.golden_sand),
-                fontSize = 16.sp                // slightly bigger label
-            )
-
-            Spacer(modifier = Modifier.height(12.dp))
-
-            Text(
-                text = amount,
-                color = colorResource(id = R.color.golden_orange),
-                fontSize = 28.sp,               // big emphasis
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-
-//action buttons
-@Composable
-fun ActionButton(
-    text: String,
-    icon: ImageVector,
-    backgroundColor: Int,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Button(
-        onClick = onClick,
-        modifier = modifier.height(56.dp),
-        shape = RoundedCornerShape(14.dp),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = colorResource(id = backgroundColor)
-        ),
-        elevation = ButtonDefaults.buttonElevation(defaultElevation = 4.dp)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Icon(
-                imageVector = icon,
-                contentDescription = text,
-                tint = Color.White,
-                modifier = Modifier.size(24.dp)
-
-            )
-
-            Text(
-                text = text,
-                color = Color.White,
-                fontSize = 14.sp,
-                fontWeight = FontWeight.SemiBold
-            )
-        }
-    }
-}
-
-
-@Composable
-fun DayActionsRow(
-    onAddExpense: () -> Unit,
-    onCloseDay: () -> Unit,
-    onAddOpenCash: () -> Unit,
-    onViewAllExpense: () -> Unit
-) {
-    FlowRow(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 16.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp),
-        maxItemsInEachRow = 2   // ✅ two buttons per row
-    ) {
-
-        ActionButton(
-            text = "Opening Cash",
-            icon = Icons.Default.Add,
-            backgroundColor = R.color.seaweed,
-            onClick = onAddOpenCash
-        )
-
-        ActionButton(
-            text = "Add Expense",
-            icon = Icons.Default.Create,
-            backgroundColor = R.color.yale_blue,
-            onClick = onAddExpense
-        )
-
-        ActionButton(
-            text = "Close Day",
-            icon = Icons.Default.Lock,
-            backgroundColor = R.color.oxford_navy,
-            onClick = onCloseDay
-        )
-
-        ActionButton(
-            text = "View Expenses",
-            icon = FontAwesomeIcons.Solid.FileInvoiceDollar,
-            backgroundColor = R.color.oxford_navy,
-            onClick = onViewAllExpense
-        )
-    }
-}
-
-
-
-
 
 
 @Composable
@@ -418,4 +433,3 @@ fun rememberGreeting(): String {
 
     return greeting
 }
-
